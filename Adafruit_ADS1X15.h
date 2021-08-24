@@ -155,6 +155,7 @@ public:
 	void startADC_Differential_2_3();
   int16_t readADC_Differential_2_3();
   void startComparator_SingleEnded(uint8_t channel, int16_t threshold);
+	bool conversionComplete();
   int16_t getLastConversionResults();
   float computeVolts(int16_t counts);
   void setGain(adsGain_t gain);
@@ -163,7 +164,6 @@ public:
   uint16_t getDataRate();
 
 private:
-  bool conversionComplete();
   void writeRegister(uint8_t reg, uint16_t value);
   uint16_t readRegister(uint8_t reg);
   uint8_t buffer[3];
