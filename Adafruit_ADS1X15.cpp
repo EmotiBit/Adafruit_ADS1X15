@@ -109,20 +109,21 @@ void Adafruit_ADS1X15::setDataRate(uint16_t rate) { m_dataRate = rate; }
 /**************************************************************************/
 uint16_t Adafruit_ADS1X15::getDataRate() { return m_dataRate; }
 
+
 /**************************************************************************/
 /*!
-    @brief  Gets a single-ended ADC reading from the specified channel
+    @brief  Starts a single-ended ADC conversion on the specified channel
 
     @param channel ADC channel to read
 
-    @return the ADC reading
+    @return success status
 */
 /**************************************************************************/
-int16_t Adafruit_ADS1X15::readADC_SingleEnded(uint8_t channel) {
+bool Adafruit_ADS1X15::startADC_SingleEnded(uint8_t channel) {
   if (channel > 3) {
-    return 0;
-  }
-
+    return false;
+  }	
+	
   // Start with default values
   uint16_t config =
       ADS1X15_REG_CONFIG_CQUE_NONE |    // Disable the comparator (default val)
@@ -158,6 +159,27 @@ int16_t Adafruit_ADS1X15::readADC_SingleEnded(uint8_t channel) {
 
   // Write config register to the ADC
   writeRegister(ADS1X15_REG_POINTER_CONFIG, config);
+  
+  return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Gets a single-ended ADC reading from the specified channel
+
+    @param channel ADC channel to read
+
+    @return the ADC reading
+*/
+/**************************************************************************/
+int16_t Adafruit_ADS1X15::readADC_SingleEnded(uint8_t channel) {
+  if (channel > 3) {
+    return 0;
+  }
+
+	if (!startADC_SingleEnded(channel)) {
+		return 0;
+	}
 
   // Wait for the conversion to complete
   while (!conversionComplete())
@@ -169,15 +191,11 @@ int16_t Adafruit_ADS1X15::readADC_SingleEnded(uint8_t channel) {
 
 /**************************************************************************/
 /*!
-    @brief  Reads the conversion results, measuring the voltage
-            difference between the P (AIN0) and N (AIN1) input.  Generates
-            a signed value since the difference can be either
-            positive or negative.
-
-    @return the ADC reading
+    @brief  Starts an ADC conversion, measuring the voltage
+            difference between the P (AIN0) and N (AIN1) input.
 */
 /**************************************************************************/
-int16_t Adafruit_ADS1X15::readADC_Differential_0_1() {
+void Adafruit_ADS1X15::startADC_Differential_0_1() {
   // Start with default values
   uint16_t config =
       ADS1X15_REG_CONFIG_CQUE_NONE |    // Disable the comparator (default val)
@@ -200,6 +218,20 @@ int16_t Adafruit_ADS1X15::readADC_Differential_0_1() {
 
   // Write config register to the ADC
   writeRegister(ADS1X15_REG_POINTER_CONFIG, config);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Reads the conversion results, measuring the voltage
+            difference between the P (AIN0) and N (AIN1) input.  Generates
+            a signed value since the difference can be either
+            positive or negative.
+
+    @return the ADC reading
+*/
+/**************************************************************************/
+int16_t Adafruit_ADS1X15::readADC_Differential_0_1() {
+	startADC_Differential_0_1()
 
   // Wait for the conversion to complete
   while (!conversionComplete())
@@ -209,17 +241,14 @@ int16_t Adafruit_ADS1X15::readADC_Differential_0_1() {
   return getLastConversionResults();
 }
 
+
 /**************************************************************************/
 /*!
-    @brief  Reads the conversion results, measuring the voltage
-            difference between the P (AIN2) and N (AIN3) input.  Generates
-            a signed value since the difference can be either
-            positive or negative.
-
-    @return the ADC reading
+    @brief  Starts an ADC conversion, measuring the voltage
+            difference between the P (AIN2) and N (AIN3) input.  
 */
 /**************************************************************************/
-int16_t Adafruit_ADS1X15::readADC_Differential_2_3() {
+void Adafruit_ADS1X15::startADC_Differential_2_3() {
   // Start with default values
   uint16_t config =
       ADS1X15_REG_CONFIG_CQUE_NONE |    // Disable the comparator (default val)
@@ -242,6 +271,20 @@ int16_t Adafruit_ADS1X15::readADC_Differential_2_3() {
 
   // Write config register to the ADC
   writeRegister(ADS1X15_REG_POINTER_CONFIG, config);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Reads the conversion results, measuring the voltage
+            difference between the P (AIN2) and N (AIN3) input.  Generates
+            a signed value since the difference can be either
+            positive or negative.
+
+    @return the ADC reading
+*/
+/**************************************************************************/
+int16_t Adafruit_ADS1X15::readADC_Differential_2_3() {
+	startADC_Differential_2_3();
 
   // Wait for the conversion to complete
   while (!conversionComplete())
