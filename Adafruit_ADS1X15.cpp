@@ -58,13 +58,19 @@ Adafruit_ADS1115::Adafruit_ADS1115() {
 
     @param i2c_addr I2C address of device
     @param wire I2C bus
+	@param bool callBegin - Use false to call begin() manually (e.g. for 2ndary I2C pins)
 
     @return true if successful, otherwise false
 */
 /**************************************************************************/
-bool Adafruit_ADS1X15::begin(uint8_t i2c_addr, TwoWire *wire) {
+bool Adafruit_ADS1X15::begin(uint8_t i2c_addr, TwoWire *wire, bool callBegin) {
   m_i2c_dev = new Adafruit_I2CDevice(i2c_addr, wire);
-  return m_i2c_dev->begin();
+  if (callBegin) {
+	return m_i2c_dev->begin();
+  }
+  else {
+	return true;
+  }
 }
 
 /**************************************************************************/
