@@ -231,7 +231,7 @@ void Adafruit_ADS1X15::startADC_Differential_0_1() {
 */
 /**************************************************************************/
 int16_t Adafruit_ADS1X15::readADC_Differential_0_1() {
-	startADC_Differential_0_1()
+	startADC_Differential_0_1();
 
   // Wait for the conversion to complete
   while (!conversionComplete())
